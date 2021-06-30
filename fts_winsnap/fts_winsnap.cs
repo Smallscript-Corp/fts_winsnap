@@ -101,14 +101,14 @@ namespace fts_winsnap
             }
 
             // Register hotkeys
-            RegisterHotKey(this.Handle, 0, Constants.WM_MOD_CTRL | Constants.WM_MOD_ALT, (int)Keys.Left);
-            RegisterHotKey(this.Handle, 1, Constants.WM_MOD_CTRL | Constants.WM_MOD_ALT, (int)Keys.Right);
-            RegisterHotKey(this.Handle, 2, Constants.WM_MOD_CTRL | Constants.WM_MOD_ALT, (int)Keys.Up);
-            RegisterHotKey(this.Handle, 3, Constants.WM_MOD_CTRL | Constants.WM_MOD_ALT, (int)Keys.Down);
-            RegisterHotKey(this.Handle, 4, Constants.WM_MOD_CTRL | Constants.WM_MOD_SHIFT | Constants.WM_MOD_ALT, (int)Keys.Down);
-            RegisterHotKey(this.Handle, 5, Constants.WM_MOD_CTRL | Constants.WM_MOD_SHIFT | Constants.WM_MOD_ALT, (int)Keys.Left);
-            RegisterHotKey(this.Handle, 6, Constants.WM_MOD_CTRL | Constants.WM_MOD_SHIFT | Constants.WM_MOD_ALT, (int)Keys.Right);
-            RegisterHotKey(this.Handle, 7, Constants.WM_MOD_CTRL | Constants.WM_MOD_SHIFT | Constants.WM_MOD_ALT, (int)Keys.Up);
+            RegisterHotKey(this.Handle, 0, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT, (int)Keys.Left);
+            RegisterHotKey(this.Handle, 1, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT, (int)Keys.Right);
+            RegisterHotKey(this.Handle, 2, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT, (int)Keys.Up);
+            RegisterHotKey(this.Handle, 3, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT, (int)Keys.Down);
+            RegisterHotKey(this.Handle, 4, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT | Constants.WM_MOD_SHIFT, (int)Keys.Down);
+            RegisterHotKey(this.Handle, 5, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT | Constants.WM_MOD_SHIFT, (int)Keys.Left);
+            RegisterHotKey(this.Handle, 6, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT | Constants.WM_MOD_SHIFT, (int)Keys.Right);
+            RegisterHotKey(this.Handle, 7, Constants.WM_MOD_WIN | Constants.WM_MOD_ALT | Constants.WM_MOD_SHIFT, (int)Keys.Up);
 
 
             // Initialize fonts for UI
@@ -147,7 +147,7 @@ namespace fts_winsnap
                 // Create a new layout for this monitor
                 var newLayout = new MonitorLayout(monitor);
                 _layouts.Add(newLayout);
-                
+
                 // Grab settings for this monitor
                 var monitorSettings = _settings.monitorSettings[idx - 1];
 
@@ -174,7 +174,7 @@ namespace fts_winsnap
                     monitorSettings.adjustSize = newLayout.adjustSize;
                     SaveSettings();
                 };
-                
+
                 this.Controls.Add(resizeControl);
 
 
@@ -319,13 +319,13 @@ namespace fts_winsnap
             // 'Controls' section header
             var controls = createLabel("Controls", karlaFamily, 2f, FontStyle.Bold, new Padding(4), new Rectangle(0, y, 0, 0));
 
-            // 'Move: Ctrl  +  Alt +  ArrowKey'
+            // 'Move: Win  +  Alt +  ArrowKey'
             var moveLabel = createLabel("Move: ", karlaFamily, 1.5f, FontStyle.Regular, new Padding(32, 3, 3, 3), new Rectangle(controls.Bounds.Left, controls.Bounds.Bottom, 0, 0));
-            var moveControls = createLabel("Ctrl  +  Alt +  ArrowKey", karlaFamily, 1.5f, FontStyle.Regular, new Padding(3), new Rectangle(110, moveLabel.Bounds.Top, 0, 0));
+            var moveControls = createLabel("Win  +  Alt +  ArrowKey", karlaFamily, 1.5f, FontStyle.Regular, new Padding(3), new Rectangle(110, moveLabel.Bounds.Top, 0, 0));
 
-            // 'Expand: Ctrl  +  Alt  +  Shift  +  ArrowKey'
+            // 'Expand: Win  +  Alt  +  Shift  +  ArrowKey'
             var expandLabel = createLabel("Expand: ", karlaFamily, 1.5f, FontStyle.Regular, new Padding(32, 3, 3, 3), new Rectangle(moveLabel.Bounds.Left, moveLabel.Bounds.Bottom, 0, 0));
-            var expandText = createLabel("Ctrl  +  Alt  +  Shift  +  ArrowKey", karlaFamily, 1.5f, FontStyle.Regular, new Padding(3), new Rectangle(110, expandLabel.Bounds.Top, 0, 0));
+            var expandText = createLabel("Win  +  Alt  +  Shift  +  ArrowKey", karlaFamily, 1.5f, FontStyle.Regular, new Padding(3), new Rectangle(110, expandLabel.Bounds.Top, 0, 0));
 
 
             // 'Options' section header
@@ -442,7 +442,7 @@ namespace fts_winsnap
                     bool requireDifferentScreen = (isMaximized && moveDir == Direction.Up) || (isMinimized && moveDir == Direction.Down);
                     if (requireDifferentScreen && isSameScreen)
                         continue;
-                    
+
                     // Moving Left/Right while Maximized OR Minimized MUST stay on the same screen
                     bool requireSameScreen = (moveDir == Direction.Left || moveDir == Direction.Right) && (isMaximized || isMinimized);
                     if (requireSameScreen && !isSameScreen)
@@ -542,7 +542,7 @@ namespace fts_winsnap
             // Windows can't handle moving to a monitor with a different scale factor.
             // So see if SetWindowPlacement failed to the put window where we said to put it
             // If it did fail, then use SetWindowPos to set pos/size
-            // Note: We don't use SetWindowPos all the time because SetWindowPos on a maximized window 
+            // Note: We don't use SetWindowPos all the time because SetWindowPos on a maximized window
             // either pops (ShowCmd.Normal) or we lose the maximize flag which screws up everything :(
             GetWindowRect(window, out windowRect);
             if ((windowRect.Width != screenRect.Width || windowRect.Height != screenRect.Height)) {
@@ -597,7 +597,7 @@ namespace fts_winsnap
             _settings = JsonConvert.DeserializeObject<Settings>(json);
             filestream.Close();
         }
-        
+
         protected override void WndProc(ref Message m)
         {
             // Handle hotkey messages

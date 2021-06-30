@@ -12,3 +12,4 @@ obj
 *.user
 *.VC.db
 *.VC.opendb
+/extern
